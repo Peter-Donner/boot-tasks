@@ -1,0 +1,2 @@
+{:keyring "~/.gnupg/secring.gpg"
+ :user-id "Peter Donner <peter@markup.at>"}
