@@ -33,11 +33,12 @@
     (let [output (sass "-I" "." "-E" "utf-8" "-t" "compressed" sass-file {:dir dir})]
       output)))
 
-(defn has-anything-changed? [last-fileset fileset]
-  (println "has-anything-changed?")
+(defn src-changed? [last-fileset fileset]
   (let [diff (c/by-ext [".scss"] (c/input-files (c/fileset-diff last-fileset fileset :hash)))
-        has-diff (= () diff)]
-    (not has-diff)))
+        removed (c/by-ext [".scss"] (c/input-files (c/fileset-removed last-fileset fileset)))
+        has-diff (not (empty? diff))
+        has-removed-files (not (empty? removed))]
+    (or has-diff has-removed-files)))
 
 (c/deftask sass []
   (let [tmp-css-resource (c/tmp-dir!)
@@ -51,7 +52,8 @@
         (doto out-file io/make-parents (spit content))))
     (fn middleware [next-handler]
       (fn handler [fileset]
-        (when (has-anything-changed? @last-fileset fileset)
+        (when (src-changed? @last-fileset fileset)
+          (c/empty-dir! tmp-css-resource)
           (let [in-files (c/input-files fileset)
                 scss-files (c/by-ext [".scss"] in-files)]
             ;; copy SCSS files from resources
@@ -72,5 +74,4 @@
                                (str tmp-scss)))))))))
         (let [new-fileset (c/commit! (c/add-resource fileset tmp-css-resource))]
           (reset! last-fileset new-fileset)
-          (println "new-fileset" new-fileset)
           (next-handler new-fileset))))))
