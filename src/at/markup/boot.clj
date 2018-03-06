@@ -28,9 +28,9 @@
   (.replaceAll path "\\.scss$" ".css"))
 
 (defn compile-sass
-  [sass-file dir]
+  [sass-file dir options]
   (with-programs [sass]
-    (let [output (sass "-I" "." "-E" "utf-8" "-t" "compressed" sass-file {:dir dir})]
+    (let [output (sass "-I" "." "-E" "utf-8" "-t" (name (:style options)) sass-file {:dir dir})]
       output)))
 
 (defn src-changed? [last-fileset fileset]
@@ -40,7 +40,11 @@
         has-removed-files (not (empty? removed))]
     (or has-diff has-removed-files)))
 
-(c/deftask sass []
+(defn sass-options [options]
+  (merge {:style :nested} options))
+
+(c/deftask sass
+  [t style VAL kw "Output style. Can be :nested (default), :compact, :compressed, or :expanded."]
   (let [tmp-css-resource (c/tmp-dir!)
         tmp-scss (c/tmp-dir!)
         last-fileset (atom nil)]
@@ -71,7 +75,8 @@
                   (doto out-file io/make-parents
                         (spit (compile-sass
                                in-path
-                               (str tmp-scss)))))))))
+                               (str tmp-scss)
+                               (sass-options *opts*)))))))))
         (let [new-fileset (c/commit! (c/add-resource fileset tmp-css-resource))]
           (reset! last-fileset new-fileset)
           (next-handler new-fileset))))))
