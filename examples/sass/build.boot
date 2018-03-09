@@ -22,5 +22,6 @@
    (serve :port 8080)
    (watch :verbose true)
    (reload :port 10555 :ws-port 10555)
-   (sass :style :compressed)
+   (sass :style :expanded
+         :sourcemap :file)
    (cljs)))

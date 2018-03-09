@@ -1,5 +1,5 @@
 # boot-tasks
-Web development tasks for boot.
+Web development tasks for boot. This library uses spec, so Clojure >= 1.9.0 is needed.
 
 ## SASS Compilation
 
@@ -13,6 +13,20 @@ $ gem install sass
 ### Features
 - WebJars are supported
 - Works well with the 'watch' task
+- Sourcemaps are supported
+
+### Options
+```
+$ boot sass -h
+
+Compile SCSS files.
+
+Options:
+  -h, --help                  Print this help info.
+  -t, --style VAL             VAL sets output style. Can be :nested (default), :compact, :compressed, or :expanded.
+      --sourcemap VAL         VAL sets sourcemap format. Can be :auto (default), :file, :inline, or :none.
+  -E, --default-encoding VAL  VAL sets default encoding. utf-8 (default).
+```
 
 ### Examples
 ```clojure
