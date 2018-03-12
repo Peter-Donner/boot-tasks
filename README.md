@@ -4,7 +4,7 @@ Web development tasks for boot. This library uses spec, so Clojure >= 1.9.0 is n
 ## SASS Compilation
 
 ### Requirements
-The 'sass' task instruments an existing sass binary. So the sass command must work on the shell that is used for the Boot system. If you don't have a sass binary on your system you can use Ruby's version for example.
+The 'sass' task instruments an existing sass executable (sass on *nix, sass.bat on Windows). So the sass command must work on the shell that is used for the Boot system. If you don't have a sass executable on your system you can use Ruby's version for example.
 
 ```
 $ gem install sass
@@ -43,6 +43,6 @@ Options:
    (watch)
    (reload)
    (sass)
-(cljs)))
+   (cljs)))
 ```
 See https://github.com/Peter-Donner/boot-tasks/tree/master/examples/sass for a working example that supports CSS live reloading.

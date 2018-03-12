@@ -2,9 +2,10 @@
   {:boot/export-tasks true}
   (:require
    [boot.core :as c]
-   [me.raynes.conch :refer [with-programs]]
+   [me.raynes.conch :refer [let-programs]]
    [clojure.java.io :as io]
-   [clojure.spec.alpha :as s])
+   [clojure.spec.alpha :as s]
+   [at.markup.os :refer [Windows?]])
   (:import
    [java.io File]
    [org.webjars WebJarAssetLocator]))
@@ -44,7 +45,7 @@
 
 (defn compile-sass
   [sass-file dir out-filename options]
-  (with-programs [sass]
+  (let-programs [sass (if (Windows?) "sass.bat" "sass")]
     (let [output (sass "--load-path" "."
                        "--default-encoding" (::sass-default-encoding options)
                        "--style" (name (::sass-style options))
