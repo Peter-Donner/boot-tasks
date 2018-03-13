@@ -6,10 +6,8 @@
    [clojure.java.io :as io]
    [clojure.spec.alpha :as s]
    [at.markup.os :refer [Windows?]]
-   [at.markup.task.sass :as sass-task])
-  (:import
-   [java.io File]
-   [org.webjars WebJarAssetLocator]))
+   [at.markup.task.sass :as sass-task]
+   [at.markup.webjar :refer [asset-map]]))
 
 (s/def ::sass-style
   #{:nested :compact :compressed :expanded})
@@ -24,21 +22,6 @@
   (s/keys :req [::sass-style
                 ::sass-sourcemap
                 ::sass-default-encoding]))
-
-(def ^:private webjars-pattern
-  #"META-INF/resources/webjars/([^/]+)/([^/]+)/(.*)")
-
-(defn- asset-path [resource]
-  (let [[_ name version path] (re-matches webjars-pattern resource)]
-    (str name "/" path)))
-
-(defn asset-map
-  "Create map of asset path to classpath resource url. Asset path is
-  the resource url without webjars part."
-  []
-  (->> (vals (.getFullPathIndex (WebJarAssetLocator.)))
-       (map (juxt asset-path identity))
-       (into {})))
 
 (defn- scss->css
   [path]
