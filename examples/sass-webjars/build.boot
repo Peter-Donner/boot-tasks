@@ -14,7 +14,7 @@
  '[adzerk.boot-cljs      :refer [cljs]]
  '[adzerk.boot-reload    :refer [reload]]
  '[pandeiro.boot-http :refer [serve]]
- '[at.markup.boot :refer [sass]])
+ '[at.markup.boot :refer [sass webjars]])
 
 (deftask dev
   []

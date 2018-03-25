@@ -45,4 +45,16 @@ Options:
    (sass)
    (cljs)))
 ```
-See https://github.com/Peter-Donner/boot-tasks/tree/master/examples/sass for a working example that supports CSS live reloading.
+See https://github.com/Peter-Donner/boot-tasks/tree/master/examples/sass-webjars for a working example that supports CSS live reloading.
+
+## WebJars
+### webjars task
+Work in progress.
+```clojure
+(require
+ '[at.markup.boot :refer [webjars]])
+```
+
+```
+$ boot [ webjars ls ]
+```

@@ -1,5 +1,4 @@
 (ns at.markup.task.sass
-  {:boot/export-tasks true}
   (:require
    [boot.core :as c]
    [me.raynes.conch :refer [let-programs]]
@@ -7,7 +6,7 @@
    [clojure.spec.alpha :as s]
    [at.markup.os :refer [Windows?]]
    [at.markup.task.sass :as sass-task]
-   [at.markup.webjar :refer [asset-map]]))
+   [at.markup.webjars :refer [asset-map]]))
 
 (s/def ::sass-style
   #{:nested :compact :compressed :expanded})
@@ -30,14 +29,13 @@
 (defn compile-sass
   [sass-file dir out-filename options]
   (let-programs [sass (if (Windows?) "sass.bat" "sass")]
-    (let [output (sass "--load-path" "."
-                       "--default-encoding" (::sass-default-encoding options)
-                       "--style" (name (::sass-style options))
-                       (str "--sourcemap=" (name (::sass-sourcemap options)))
-                       sass-file
-                       out-filename
-                       {:dir dir})]
-      output)))
+    (sass "--load-path" "."
+          "--default-encoding" (::sass-default-encoding options)
+          "--style" (name (::sass-style options))
+          (str "--sourcemap=" (name (::sass-sourcemap options)))
+          sass-file
+          out-filename
+          {:dir dir})))
 
 (defn src-changed? [last-fileset fileset]
   (let [diff (c/by-ext [".scss"] (c/input-files (c/fileset-diff last-fileset fileset :hash)))

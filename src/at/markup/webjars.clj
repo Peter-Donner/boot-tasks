@@ -1,6 +1,5 @@
-(ns at.markup.webjar
+(ns at.markup.webjars
   (:import
-   [java.io File]
    [org.webjars WebJarAssetLocator]))
 
 (def ^:private webjars-pattern
@@ -17,4 +16,3 @@
   (->> (vals (.getFullPathIndex (WebJarAssetLocator.)))
        (map (juxt asset-path identity))
        (into {})))
-
