@@ -13,12 +13,19 @@
 
 (defmulti cmd-handler (fn [[m]] m))
 
-(defmethod cmd-handler "ls" [cmd-arg]
-  (print-tree [["webjars" (nodes)]]))
+(defmethod cmd-handler "ls" [[_ regex]]
+  (let [regex-nil? (nil? regex)
+        label (if regex-nil? "webjars" (str "webjars filter=(" regex ")"))
+        nodes (if regex-nil?
+                (nodes)
+                (filter #(re-find
+                          (re-pattern regex) (first %))
+                        (nodes)))]
+    (print-tree [[label nodes]])))
 
 (defmethod cmd-handler "export" [cmd-arg]
   (println "export handler"))
-  
+
 (defn webjars
   [args]
   (fn middleware [next-handler]

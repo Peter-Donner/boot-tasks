@@ -56,5 +56,5 @@ Work in progress.
 ```
 
 ```
-$ boot [ webjars ls ]
+$ boot [ webjars ls "test.*carousel" ]
 ```
